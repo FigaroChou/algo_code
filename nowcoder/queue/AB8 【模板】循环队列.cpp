@@ -10,7 +10,7 @@ public:
       _rear(0),
       _size(0)
     {
-        _queue = new int[_capacity];
+        _queue = new int[_capacity + 1];
     }
 
     bool empty() {
@@ -18,31 +18,33 @@ public:
     }
 
     bool full() {
-        return _front == ((_rear + 1) % _capacity);
+        return _front == ((_rear + 1) % (_capacity + 1));
     }
 
     void push(int x) {
         if (full()) {
-            std::cout << "error" << std::endl;
+            std::cout << "full" << std::endl;
             return;
         }
         _size++;
         _queue[_rear] = x;
-        _rear = (_rear + 1) % _capacity;
+        _rear = (_rear + 1) % (_capacity + 1);
     }
 
     int pop() {
         if (empty()) {
+            std::cout << "empty" << std::endl;
             return -1;
         }
         _size--;
         int res = _queue[_front];
-        _front = (_front + 1) % _capacity;
+        _front = (_front + 1) % (_capacity + 1);
         return res;
     }
 
     int front() {
         if (empty()) {
+            std::cout << "empty" << std::endl;
             return -1;
         }
 
@@ -56,12 +58,11 @@ private:
     int *_queue;
 };
 
-#define N 100010
 int main() {
-    int count;
-    cin >> count;
+    int capacity, count;
+    cin >> capacity >> count;
 
-    CircularQueue q(N);
+    CircularQueue q(capacity);
     std::string op;
     int val;
     while (count-- > 0) {
@@ -71,16 +72,12 @@ int main() {
             q.push(val);
         } else if (op == "pop") {
             int res = q.pop();
-            if (res < 0) {
-                std::cout << "error" << std::endl;
-            } else {
+            if (res > 0) {
                 std::cout << res << std::endl;
             }
         } else if (op == "front") {
             int res = q.front();
-            if (res < 0) {
-                std::cout << "error" << std::endl;
-            } else {
+            if (res > 0) {
                 std::cout << res << std::endl;
             }
         } 
